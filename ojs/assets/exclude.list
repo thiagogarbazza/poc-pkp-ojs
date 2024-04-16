@@ -1,0 +1,4 @@
+/etc/apache2/conf.d/ssl.conf
+/root/.cache/*
+/tmp/*
+/var/www/html/config.TEMPLATE.inc.php

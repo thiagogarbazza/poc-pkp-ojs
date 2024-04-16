@@ -1,0 +1,49 @@
+services:
+  pkp-ojs:
+    build:
+      context: .
+      dockerfile: ojs/Dockerfile
+    image: poc-pkp-ojs/ojs:latest
+    # stdin_open: true # docker run -i
+    # tty: true        # docker run -t
+    # entrypoint: /bin/bash
+    environment:
+      - OJS_CLI_INSTALL=On
+      - OJS_DB_HOST=postgres
+      - OJS_DB_DRIVER=postgres9
+      - OJS_DB_USER=postgreSQL
+      - OJS_DB_PASSWORD=postgreSQL
+      - OJS_DB_NAME=ojs
+    networks:
+      - devel-net
+    volumes:
+      - ojs-files:/var/www/files
+      - ojs-public:/var/www/html/public
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: postgreSQL
+      POSTGRES_PASSWORD: "postgreSQL"
+      PGDATA: /data/postgres
+      POSTGRES_DB: ojs
+    networks:
+      - devel-net
+    volumes:
+      - postgres-data:/data/postgres
+    ports:
+      - "5432:5432"
+
+networks:
+  devel-net:
+    external: false
+
+volumes:
+  ojs-files:
+  ojs-public:
+  postgres-data:
