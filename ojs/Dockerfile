@@ -18,7 +18,6 @@ RUN  apk add --no-cache shadow \
   && rm -rf $(cat /tmp/exclude.list)
 
 ADD target/app.tar.gz /var/www/html
-COPY ojs/assets/healthcheck.php /var/www/html
 COPY ojs/assets/bin /usr/local/bin
 COPY ojs/assets/httpd.conf /etc/apache2
 COPY ojs/assets/httpd-ojs.conf /etc/apache2/conf.d

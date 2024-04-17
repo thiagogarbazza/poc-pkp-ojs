@@ -13,14 +13,34 @@ tar -xzf target/ojs.tar.gz -C target
 mv target/ojs-$OJS_VERSION target/app
 
 echo "Install themes plugin: Bootstrap 3 Base Theme"
-git clone --depth=1 https://github.com/pkp/bootstrap3.git        target/app/plugins/themes/bootstrap3
+git clone --depth=1 https://github.com/pkp/bootstrap3.git target/app/plugins/themes/bootstrap3
 
 echo "Install generic plugin: Allowed Uploads "
 git clone --depth=1 https://github.com/ajnyga/allowedUploads.git target/app/plugins/generic/allowedUploads
 cp -ap target/app/plugins/generic/allowedUploads/locale/en target/app/plugins/generic/allowedUploads/locale/pt_BR
 
 echo "Install generic plugin: Backup"
-git clone --depth=1 https://github.com/asmecher/backup.git       target/app/plugins/generic/backup
+git clone --depth=1 https://github.com/asmecher/backup.git target/app/plugins/generic/backup
+
+
+echo "Generate healthcheck"
+echo "<?php
+  declare(strict_types=1);
+
+  echo 'OK';
+?>" > target/app/healthcheck.php
+
+
+echo "Generate build-info"
+echo "<!DOCTYPE html>
+<html>
+<body>
+
+  OJS version=$OJS_VERSION
+
+</body>
+</html>" > target/app/build-info.html
+
 
 echo "Remove trash files"
 rm -rf target/app/config.TEMPLATE.inc.php \
