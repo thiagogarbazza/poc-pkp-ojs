@@ -1,8 +1,8 @@
 services:
-  pkp-ojs:
+  ojs:
     build:
-      context: .
-      dockerfile: ojs/Dockerfile
+      context: ../
+      dockerfile: src/ojs/Dockerfile
     image: poc-pkp-ojs/ojs:latest
     # stdin_open: true # docker run -i
     # tty: true        # docker run -t
@@ -22,6 +22,32 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    depends_on:
+      - postgres
+      - pkp-job-backup
+
+  job-backup:
+    build:
+      context: ../
+      dockerfile: src/jobs/backup/Dockerfile
+    image: poc-pkp-ojs/job-backup:latest
+    # stdin_open: true # docker run -i
+    # tty: true        # docker run -t
+    # entrypoint: /bin/ash
+    environment:
+      - OJS_CLI_INSTALL=On
+      - OJS_DB_HOST=postgres
+      - OJS_DB_DRIVER=postgres9
+      - OJS_DB_USER=postgreSQL
+      - OJS_DB_PASSWORD=postgreSQL
+      - OJS_DB_NAME=ojs
+    networks:
+      - devel-net
+    volumes:
+      - ojs-files:/var/www/files
+      - ojs-public:/var/www/html/public
+      - postgres-data:/data/postgres
+      - backups:/data/backups
     depends_on:
       - postgres
 
@@ -47,3 +73,4 @@ volumes:
   ojs-files:
   ojs-public:
   postgres-data:
+  backups:

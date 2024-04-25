@@ -1,3 +1,5 @@
 *
-!ojs/assets/*
+!src/jobs/backup/assets/*
+!src/ojs/assets/*
+!src/postgres/assets/*
 !target/app.tar.gz

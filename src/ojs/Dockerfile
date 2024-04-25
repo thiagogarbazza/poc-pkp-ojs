@@ -1,6 +1,6 @@
 FROM alpine:3.16
 
-COPY ojs/assets/exclude.list /tmp
+COPY src/ojs/assets/exclude.list /tmp
 
 RUN  apk add --no-cache shadow \
   && apk add --no-cache apache2 apache2-ssl apache2-utils \
@@ -18,9 +18,9 @@ RUN  apk add --no-cache shadow \
   && rm -rf $(cat /tmp/exclude.list)
 
 ADD target/app.tar.gz /var/www/html
-COPY ojs/assets/bin /usr/local/bin
-COPY ojs/assets/httpd.conf /etc/apache2
-COPY ojs/assets/httpd-ojs.conf /etc/apache2/conf.d
+COPY src/ojs/assets/bin /usr/local/bin
+COPY src/ojs/assets/httpd.conf /etc/apache2
+COPY src/ojs/assets/httpd-ojs.conf /etc/apache2/conf.d
 
 WORKDIR /var/www
 
