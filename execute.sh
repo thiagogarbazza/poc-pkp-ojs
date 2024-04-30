@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -eu pipefail
 
-COMPOSE_PROJECT_NAME="poc-pkp-ojs"
+expose COMPOSE_PROJECT_NAME="poc-pkp-ojs"
 SKIP_BUILD_APP=false
 CLEAN_OLD_EXECUTION=""
 
