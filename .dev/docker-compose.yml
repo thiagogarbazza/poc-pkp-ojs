@@ -1,12 +1,13 @@
+name: poc-pkp-ojs
 services:
   ojs:
+    image: poc-pkp-ojs/ojs:latest
     build:
       context: ../
       dockerfile: src/ojs/Dockerfile
-    image: poc-pkp-ojs/ojs:latest
     # stdin_open: true # docker run -i
     # tty: true        # docker run -t
-    # entrypoint: /bin/bash
+    # entrypoint: /bin/sh
     environment:
       - OJS_CLI_INSTALL=On
       - OJS_DB_HOST=postgres
@@ -22,18 +23,25 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    healthcheck:
+      test: curl -f https://localhost/healthcheck.php || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s
     depends_on:
       - postgres
-      - pkp-job-backup
+      - job-backup
 
   job-backup:
+    image: poc-pkp-ojs/job-backup:latest
     build:
       context: ../
       dockerfile: src/jobs/backup/Dockerfile
-    image: poc-pkp-ojs/job-backup:latest
     # stdin_open: true # docker run -i
     # tty: true        # docker run -t
-    # entrypoint: /bin/ash
+    # entrypoint: /bin/sh
     environment:
       - OJS_CLI_INSTALL=On
       - OJS_DB_HOST=postgres
@@ -67,7 +75,6 @@ services:
 
 networks:
   devel-net:
-    external: false
 
 volumes:
   ojs-files:
