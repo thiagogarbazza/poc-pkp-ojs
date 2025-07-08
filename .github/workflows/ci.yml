@@ -7,7 +7,21 @@ on:
 
 jobs:
 
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.ojs_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set version
+        id: set_version
+        run: |
+          PKP_OJS_VERSION=$(sed -n 's/^PKP_OJS_VERSION="\([^"]*\)".*/\1/p' .config/workflows/ci-build-pkp-ojs.sh)
+          echo "version=$PKP_OJS_VERSION" >> $GITHUB_OUTPUT
+
   build-pkp-ojs:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,21 +34,13 @@ jobs:
             ~/.cache/pkp/ojs
           restore-keys: |
             pkp-ojs
-      - name: Create environment variable for PKP-OJS version
-        run: |
-          PKP_OJS_VERSION=$(sed -n 's/^PKP_OJS_VERSION="\([^"]*\)".*/\1/p' .config/workflows/ci-build-pkp-ojs.sh)
-          echo "VERSION=$PKP_OJS_VERSION" >> $GITHUB_ENV
       - name: Build pkp-ojs
         run: |
+          echo "Versão recebida: ${{ needs.setup.outputs.version }}"
           bash .config/workflows/ci-build.sh
-
-  build-docker-images:
-    needs: build-pkp-ojs
-    runs-on: ubuntu-latest
-    steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build
         run: |
-          docker build --file src/pkp-ojs/Dockerfile     --pull --quiet --tag pkp/ojs:${{ env.VERSION }} .
-          docker build --file src/jobs/backup/Dockerfile --pull --quiet --tag pkp/ojs-job-backup:${{ env.VERSION }} .
+          docker build --file src/pkp-ojs/Dockerfile     --pull --quiet --tag pkp/ojs:${{ needs.setup.outputs.version }} .
+          docker build --file src/jobs/backup/Dockerfile --pull --quiet --tag pkp/ojs-job-backup:${{ needs.setup.outputs.version }} .
