@@ -24,7 +24,8 @@ jobs:
         run: |
           bash .config/workflows/ci-build.sh
 
-  docker:
+  build-docker-images:
+    needs: build-pkp-ojs
     runs-on: ubuntu-latest
     steps:
       - name: Set up Docker Buildx
