@@ -1,0 +1,83 @@
+services:
+
+  pkp-ojs:
+    image: pkp/ojs:latest
+    build:
+      context: ../../
+      dockerfile: src/pkp-ojs/Dockerfile
+    environment:
+      OJS_CLI_INSTALL: OFF
+      OJS_DB_HOST: postgres
+      OJS_DB_DRIVER: postgres9
+      OJS_DB_USER: postgreSQL
+      OJS_DB_PASSWORD: postgreSQL
+      OJS_DB_NAME: ojs
+    volumes:
+      - ojs-files:/var/www/files
+      - ojs-public:/var/www/html/public
+    ports:
+      - "80:80"
+      - "443:443"
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost/healthcheck.php || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+      start_interval: 5s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  job-backup:
+    image: pkp/ojs-job-backup:latest
+    build:
+      context: ../../
+      dockerfile: src/jobs/backup/Dockerfile
+    environment:
+      OJS_CLI_INSTALL: On
+      OJS_DB_HOST: postgres
+      OJS_DB_DRIVER: postgres9
+      OJS_DB_USER: postgreSQL
+      OJS_DB_PASSWORD: postgreSQL
+      OJS_DB_NAME: ojs
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgreSQL
+      POSTGRES_PASSWORD: postgreSQL
+      POSTGRES_DB: ojs
+    volumes:
+      - ojs-files:/var/www/files
+      - ojs-public:/var/www/html/public
+      - postgres-data:/var/lib/postgresql/data
+      - backups:/data/backups
+    depends_on:
+      pkp-ojs:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:17.5-alpine
+    environment:
+      POSTGRES_USER: postgreSQL
+      POSTGRES_PASSWORD: postgreSQL
+      PGDATA: /data/postgres
+      POSTGRES_DB: ojs
+      TZ: UTC
+    volumes:
+      - postgres-data:/data/postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready --dbname=$$POSTGRES_DB --username=$$POSTGRES_USER --quiet
+      interval: 1m
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+      start_interval: 5s
+
+volumes:
+  ojs-files:
+  ojs-public:
+  postgres-data:
+  backups:

@@ -9,4 +9,3 @@ Open Journal Systems (OJS) is a journal management and publishing system.
 
 - https://github.com/pkp/bootstrap3
 - https://github.com/ajnyga/allowedUploads
-- https://github.com/asmecher/backup

@@ -1,5 +1,4 @@
 *
 !src/jobs/backup/assets/*
-!src/ojs/assets/*
-!src/postgres/assets/*
-!target/app.tar.gz
+!src/pkp-ojs/assets/*
+!target/pkp-ojs.tar.gz
