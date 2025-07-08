@@ -18,7 +18,7 @@ jobs:
           path: |
             ~/.cache/pkp/ojs
           restore-keys: |
-            pkp-ojs-${{ hashFiles('package-lock.json') }}
+            pkp-ojs-${{ hashFiles('.config\workflows\ci-build-pkp-ojs.sh') }}
             pkp-ojs
       - name: Build pkp-ojs
         run: |
