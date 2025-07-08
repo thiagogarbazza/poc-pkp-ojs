@@ -7,11 +7,20 @@ on:
 
 jobs:
 
-  build-pkp-ojs:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: teste
+        run: |
+          PKP_OJS_VERSION=$(sed -n 's/^PKP_OJS_VERSION="\([^"]*\)".*/\1/p' .config/workflows/ci-build-pkp-ojs.sh)
+          echo "VERSION=$PKP_OJS_VERSION" >> $GITHUB_ENV
+
+  build-pkp-ojs:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Cache pkp-ojs packages
         uses: actions/cache@v4
         with:
