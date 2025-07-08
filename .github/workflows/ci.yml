@@ -15,11 +15,10 @@ jobs:
       - name: Cache pkp-ojs packages
         uses: actions/cache@v4
         with:
-          key:
+          key: pkp-ojs-${{ hashFiles('.config/workflows/ci-build-pkp-ojs.sh') }}
           path: |
             ~/.cache/pkp/ojs
           restore-keys: |
-            pkp-ojs-${{ hashFiles('.config/workflows/ci-build-pkp-ojs.sh') }}
             pkp-ojs
       - name: Build pkp-ojs
         run: |
