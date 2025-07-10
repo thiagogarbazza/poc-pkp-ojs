@@ -4,22 +4,22 @@ ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8 \
     TZ=America/Sao_Paulo \
-    # Sobrescreva WAIT_TO_START no PGA se precisar depurar o batch, Espera "x" segundos antes de tentar rodar o job.
+    # Override WAIT_TO_START if you need to debug job. Waits "x" seconds before attempting to run the job.
     WAIT_TO_START=0 \
-    # Sobrescreva WAIT_TO_END no PGA se precisar depurar o batch, Espera "x" segundos antes de encerrar a execução do job.
+    # Override WAIT_TO_END if you need to debug job. Waits "x" seconds before ending the job execution.
     WAIT_TO_END=0
 
 RUN set -euxo pipefail; \
-  # Cria o grupo e o usuário executor da aplicação.
+  # Create group and user to run the application.
   addgroup --system --gid 1000 appgroup; \
   adduser --disabled-password --home /home/appuser --no-create-home --system --ingroup appgroup --uid 1000 appuser; \
-  # Configura timezone
+  # Configure timezone
   apk add --no-cache tzdata; \
   cp /usr/share/zoneinfo/${TZ} /etc/localtime; \
   echo $TZ > /etc/timezone; \
-  # Adiciona as libs necessárias.
+  # Add postgresql and libraries
   apk add --no-cache postgresql17-client; \
-  # Remove lixo após instalação.
+  # Remove garbage after installation.
   rm -rf /var/cache/apk/* /root/.cache/* /tmp/*
 
 USER appuser:appgroup
