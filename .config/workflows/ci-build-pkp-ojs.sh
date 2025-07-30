@@ -1,9 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-PKP_OJS_VERSION="3.4.0-9"
-PKP_OJS_PLUGIN_ALLOWED_UPLOADS_VERSION="3.4.0.1"
-PKP_OJS_PLUGIN_BOOTSTRAP_VERSION="3_4_0-3"
+PKP_OJS_VERSION="3.5.0-1"
+PKP_OJS_PLUGIN_BOOTSTRAP_VERSION="3_5_0-0"
 
 PKP_CACHE_DIR="$HOME/.cache/pkp/ojs"
 mkdir -p $PKP_CACHE_DIR
@@ -21,20 +20,6 @@ fi
 echo "Extract PKP-OJS $PKP_OJS_VERSION into target/pkp-ojs"
 tar -xzf $PKP_CACHE_DIR/pkp-ojs-$PKP_OJS_VERSION.tar.gz -C target
 mv target/ojs-$PKP_OJS_VERSION target/pkp-ojs
-
-
-echo "
-┌─────────────────────────────────────────────────────────────────────────────┐
-├───────── Install generic plugin: Allowed Uploads                   ─────────┤
-└─────────────────────────────────────────────────────────────────────────────┘
-"
-if [[ ! -f $PKP_CACHE_DIR/pkp-ojs-plugin-generic-allowedUploads-$PKP_OJS_PLUGIN_ALLOWED_UPLOADS_VERSION.tar.gz ]]; then
-  echo "Download generic plugin: Allowed Uploads from github version '$PKP_OJS_PLUGIN_ALLOWED_UPLOADS_VERSION'"
-  curl -fsSLo $PKP_CACHE_DIR/pkp-ojs-plugin-generic-allowedUploads-$PKP_OJS_PLUGIN_ALLOWED_UPLOADS_VERSION.tar.gz https://github.com/ajnyga/allowedUploads/releases/download/$PKP_OJS_PLUGIN_ALLOWED_UPLOADS_VERSION/allowedUploads.tar.gz
-fi
-echo "Extract generic plugin: Allowed Uploads $PKP_OJS_PLUGIN_ALLOWED_UPLOADS_VERSION into target/pkp-ojs/plugins/generic"
-tar -xzf $PKP_CACHE_DIR/pkp-ojs-plugin-generic-allowedUploads-$PKP_OJS_PLUGIN_ALLOWED_UPLOADS_VERSION.tar.gz -C target/pkp-ojs/plugins/generic
-cp -ap target/pkp-ojs/plugins/generic/allowedUploads/locale/en target/pkp-ojs/plugins/generic/allowedUploads/locale/pt_BR
 
 
 echo "
@@ -70,7 +55,6 @@ echo "<!DOCTYPE html>
 <body>
 
   <br/>PKP-OJS = $PKP_OJS_VERSION
-  <br/>PKP-OJS generic plugin: Allowed Uploads = $PKP_OJS_PLUGIN_ALLOWED_UPLOADS_VERSION
   <br/>PKP-OJS themes plugin: Bootstrap 3 Base Theme = $PKP_OJS_PLUGIN_BOOTSTRAP_VERSION
 
 </body>
