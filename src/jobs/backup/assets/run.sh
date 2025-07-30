@@ -27,15 +27,15 @@ BACKUP_FILE_NAME="$(date +"%Y-%m-%d")-$TYPE"
 #### PRE-BACKUP CHECKS ####
 ###########################
 
-[ -d $BACKUP_DIR ] || { echo "[backup] backup directory is not available: $BACKUP_DIR"; exit 1; }
-[ -d $OJS_FILE_DIR ] || { echo "[backup] PKP - OJS 'files' directory is not available: $OJS_FILE_DIR"; exit 1; }
+[ -d $BACKUP_DIR ]     || { echo "[backup] backup directory is not available: $BACKUP_DIR"; exit 1; }
+[ -d $OJS_FILE_DIR ]   || { echo "[backup] PKP - OJS 'files' directory is not available: $OJS_FILE_DIR"; exit 1; }
 [ -d $OJS_PUBLIC_DIR ] || { echo "[backup] PKP - OJS 'public' directory is not available: $OJS_PUBLIC_DIR"; exit 1; }
-[ -d $POSTGRES_DIR ] || { echo "[backup] Postgres storage directory is not available: $POSTGRES_DIR"; exit 1; }
+[ -d $POSTGRES_DIR ]   || { echo "[backup] Postgres storage directory is not available: $POSTGRES_DIR"; exit 1; }
 
-[ -z "${POSTGRES_HOST:-''}" ] && { echo "[backup] Variable 'POSTGRES_HOST' is not set"; exit 1; }
-[ -z "${POSTGRES_DB:-''}" ] && { echo "[backup] Variable 'POSTGRES_DB' is not set"; exit 1; }
+[ -z "${POSTGRES_HOST:-''}" ]     && { echo "[backup] Variable 'POSTGRES_HOST' is not set"; exit 1; }
+[ -z "${POSTGRES_DB:-''}" ]       && { echo "[backup] Variable 'POSTGRES_DB' is not set"; exit 1; }
 [ -z "${POSTGRES_PASSWORD:-''}" ] && { echo "[backup] Variable 'POSTGRES_PASSWORD' is not set"; exit 1; }
-[ -z "${POSTGRES_USER:-''}" ] && { echo "[backup] Variable 'POSTGRES_USER' is not set"; exit 1; }
+[ -z "${POSTGRES_USER:-''}" ]     && { echo "[backup] Variable 'POSTGRES_USER' is not set"; exit 1; }
 
 ###########################
 #### START THE BACKUPS ####
