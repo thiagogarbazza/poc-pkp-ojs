@@ -24,11 +24,11 @@ else
 fi
 
 echo "Remove old docker images and clean old executions"
-docker compose -f .config/dev/docker-compose.yml down --remove-orphans
-[[ -n "$(docker image ls -aqf=reference='pkp/ojs*')" ]] && docker image rm -f $(docker image ls -aqf=reference="pkp/ojs*")
+docker compose --project-name poc-pkp --file .config/dev/docker-compose.yml down --remove-orphans
+[[ -n "$(docker image ls -aqf=reference='poc-pkp/*')" ]] && docker image rm -f $(docker image ls -aqf=reference="poc-pkp/*")
 
 echo "Start pkp-ojs"
-docker compose -f .config/dev/docker-compose.yml up --abort-on-container-failure --force-recreate --remove-orphans
+docker compose --project-name poc-pkp --file .config/dev/docker-compose.yml up --abort-on-container-failure --force-recreate --remove-orphans
 
 # For enter job backup container
 # docker exec -it poc-pkp-ojs-job-backup-1 ash

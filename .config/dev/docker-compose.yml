@@ -1,7 +1,7 @@
 services:
 
   pkp-ojs:
-    image: pkp/ojs:latest
+    image: poc-pkp/pkp-ojs:latest
     build:
       context: ../../
       dockerfile: src/pkp-ojs/Dockerfile
@@ -9,12 +9,15 @@ services:
       OJS_CLI_INSTALL: OFF
       OJS_DB_HOST: postgres
       OJS_DB_DRIVER: postgres9
-      OJS_DB_USER: postgreSQL
-      OJS_DB_PASSWORD: postgreSQL
       OJS_DB_NAME: ojs
+      OJS_DB_USER: my_db_oj_user
+      OJS_DB_PASSWORD: my_db_oj_p@55
+      OJS_MAIL_HOST: smtp
+      OJS_MAIL_PORT: 1025
     volumes:
       - ojs-files:/var/www/files
       - ojs-public:/var/www/html/public
+      - ./config.inc.php:/var/www/html/config.inc.php
     ports:
       - "80:80"
       - "443:443"
@@ -28,9 +31,11 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      smtp:
+        condition: service_healthy
 
   job-backup:
-    image: pkp/ojs-job-backup:latest
+    image: poc-pkp/pkp-ojs-job-backup:latest
     build:
       context: ../../
       dockerfile: src/jobs/backup/Dockerfile
@@ -42,9 +47,10 @@ services:
       OJS_DB_PASSWORD: postgreSQL
       OJS_DB_NAME: ojs
       POSTGRES_HOST: postgres
-      POSTGRES_USER: postgreSQL
-      POSTGRES_PASSWORD: postgreSQL
       POSTGRES_DB: ojs
+      POSTGRES_USER: my_db_oj_user
+      POSTGRES_PASSWORD: my_db_oj_p@55
+      WAIT_TO_START: 600
     volumes:
       - ojs-files:/var/www/files
       - ojs-public:/var/www/html/public
@@ -59,20 +65,34 @@ services:
   postgres:
     image: postgres:17.5-alpine
     environment:
-      POSTGRES_USER: postgreSQL
-      POSTGRES_PASSWORD: postgreSQL
-      PGDATA: /data/postgres
       POSTGRES_DB: ojs
+      POSTGRES_USER: my_db_oj_user
+      POSTGRES_PASSWORD: my_db_oj_p@55
       TZ: UTC
     volumes:
-      - postgres-data:/data/postgres
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
       test: pg_isready --dbname=$$POSTGRES_DB --username=$$POSTGRES_USER --quiet
       interval: 1m
       timeout: 10s
-      retries: 10
+      retries: 3
+      start_period: 30s
+      start_interval: 5s
+
+  smtp:
+    image: maildev/maildev:2.2.1
+    environment:
+      TZ: UTC
+    ports:
+      #- "1025:1025"  # SMTP port
+      - "1080:1080"  # Web UI port
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:1080/healthz || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
       start_period: 30s
       start_interval: 5s
 
