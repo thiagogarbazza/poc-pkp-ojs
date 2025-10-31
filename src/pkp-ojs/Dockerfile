@@ -1,4 +1,4 @@
-FROM alpine:3.22
+FROM alpine:3.22.2
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
@@ -18,10 +18,15 @@ RUN set -euxo pipefail; \
   # Add apache and libraries
   apk add --no-cache apache2 apache2-ssl apache2-utils; \
   # Add php and libraries
-  apk add --no-cache php84 php84-apache2 php84-bcmath php84-bz2 php84-calendar php84-ctype php84-curl php84-dom php84-exif php84-fileinfo php84-ftp \
-                     php84-gettext php84-iconv php84-intl php84-json php84-mbstring php84-opcache php84-openssl php84-pdo_pgsql php84-pgsql \
-                     php84-phar php84-posix php84-session php84-shmop php84-simplexml php84-sockets php84-sysvmsg php84-sysvsem php84-sysvshm \
-                     php84-tokenizer php84-xml php84-xmlreader php84-xmlwriter php84-zip php84-zlib; \
+  apk add --no-cache php84 php84-apache2 php84-bcmath php84-bz2 php84-calendar \
+                     php84-ctype php84-curl php84-dom php84-exif php84-fileinfo \
+                     php84-ftp php84-gettext php84-gd php84-iconv php84-intl \
+                     php84-json php84-mbstring php84-opcache php84-openssl \
+                     php84-pdo_pgsql php84-pgsql php84-phar php84-posix \
+                     php84-session php84-shmop php84-simplexml php84-sockets \
+                     php84-sysvmsg php84-sysvsem php84-sysvshm php84-tokenizer \
+                     php84-xml php84-xmlreader php84-xmlwriter php84-xsl \
+                     php84-zip php84-zlib; \
   ln -s /usr/bin/php84 /usr/bin/php; \
   # Add utility libraries
   apk add --no-cache ca-certificates; \
@@ -38,11 +43,14 @@ WORKDIR /var/www
 
 VOLUME ["/var/www/files", "/var/www/html/public"]
 
-EXPOSE 80 443
+EXPOSE 80
 
 CMD ["run.sh"]
 
-ADD  --chown=appuser:appgroup --chmod=551 target/pkp-ojs.tar.gz /var/www/html
+COPY --chown=root:root        --chmod=444 src/pkp-ojs/assets/apache.conf          /etc/apache2
+COPY --chown=root:root        --chmod=444 src/pkp-ojs/assets/apache-app.conf      /etc/apache2/conf.d
+COPY --chown=root:root        --chmod=444 src/pkp-ojs/assets/apache-security.conf /etc/apache2/conf.d
+COPY --chown=root:root        --chmod=444 src/pkp-ojs/assets/php.app.ini          /usr/local/etc/php/conf.d
+
 COPY --chown=appuser:appgroup --chmod=551 src/pkp-ojs/assets/bin/run.sh /usr/local/bin/run.sh
-COPY src/pkp-ojs/assets/httpd.conf /etc/apache2
-COPY src/pkp-ojs/assets/httpd-ojs.conf /etc/apache2/conf.d
+ADD  --chown=appuser:appgroup --chmod=551 target/pkp-ojs.tar.gz         /var/www/html
