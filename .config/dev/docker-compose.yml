@@ -1,7 +1,7 @@
 services:
 
   pkp-ojs:
-    image: poc-pkp/pkp-ojs:latest
+    image: pocs/pkp-ojs:latest
     build:
       context: ../../
       dockerfile: src/pkp-ojs/Dockerfile
@@ -14,13 +14,13 @@ services:
       OJS_DB_PASSWORD: my_db_oj_p@55
       OJS_MAIL_HOST: smtp
       OJS_MAIL_PORT: 1025
+      TZ: America/Sao_Paulo
     volumes:
       - ojs-files:/var/www/files
       - ojs-public:/var/www/html/public
       - ./config.inc.php:/var/www/html/config.inc.php
     ports:
       - "80:80"
-      - "443:443"
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost/healthcheck.php || exit 1
       interval: 1m
@@ -35,12 +35,11 @@ services:
         condition: service_healthy
 
   job-backup:
-    image: poc-pkp/pkp-ojs-job-backup:latest
+    image: pocs/pkp-ojs-job-backup:latest
     build:
       context: ../../
       dockerfile: src/jobs/backup/Dockerfile
     environment:
-      OJS_CLI_INSTALL: On
       OJS_DB_HOST: postgres
       OJS_DB_DRIVER: postgres9
       OJS_DB_USER: postgreSQL
@@ -50,7 +49,8 @@ services:
       POSTGRES_DB: ojs
       POSTGRES_USER: my_db_oj_user
       POSTGRES_PASSWORD: my_db_oj_p@55
-      WAIT_TO_START: 600
+      TZ: America/Sao_Paulo
+      WAIT_TO_START: 600 # 10 minutes
     volumes:
       - ojs-files:/var/www/files
       - ojs-public:/var/www/html/public
@@ -68,7 +68,7 @@ services:
       POSTGRES_DB: ojs
       POSTGRES_USER: my_db_oj_user
       POSTGRES_PASSWORD: my_db_oj_p@55
-      TZ: UTC
+      TZ: America/Sao_Paulo
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
@@ -84,10 +84,13 @@ services:
   smtp:
     image: maildev/maildev:2.2.1
     environment:
-      TZ: UTC
+      TZ: America/Sao_Paulo
+      MAILDEV_MAIL_DIRECTORY: /data/mail
+    volumes:
+      - maildev:/data/mail
     ports:
-      #- "1025:1025"  # SMTP port
-      - "1080:1080"  # Web UI port
+      - "1025:1025" # port SMTP
+      - "1080:1080" # port Web UI
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:1080/healthz || exit 1
       interval: 1m
@@ -97,7 +100,8 @@ services:
       start_interval: 5s
 
 volumes:
+  backups:
+  maildev:
   ojs-files:
   ojs-public:
   postgres-data:
-  backups:
