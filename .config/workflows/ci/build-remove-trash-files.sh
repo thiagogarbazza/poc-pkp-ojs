@@ -23,6 +23,7 @@ find target/pkp-ojs \
     -o -type d -iname ".github" \
     -o -iname ".gitignore" \
     -o -iname ".gitmodules" \
+    -o -iname ".husky" \
     -o -iname ".jshintrc" \
     -o -iname ".keepme" \
     -o -iname ".keepme" \

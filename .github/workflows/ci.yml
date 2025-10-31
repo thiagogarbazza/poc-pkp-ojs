@@ -15,20 +15,20 @@ jobs:
       - name: Cache pkp-ojs packages
         uses: actions/cache@v4
         with:
-          key: pkp-ojs-${{ hashFiles('.config/workflows/ci-build-pkp-ojs.sh') }}
+          key: pkp-ojs-${{ hashFiles('.config/workflows/ci/build-pkp-ojs.sh') }}
           path: |
             ~/.cache/pkp/ojs
           restore-keys: |
             pkp-ojs
       - name: Set version
         run: |
-          PKP_OJS_VERSION=$(sed -n 's/^PKP_OJS_VERSION="\([^"]*\)".*/\1/p' .config/workflows/ci-build-pkp-ojs.sh)
+          PKP_OJS_VERSION=$(sed -n 's/^PKP_OJS_VERSION="\([^"]*\)".*/\1/p' .config/workflows/ci/build-pkp-ojs.sh)
           echo "Versão extraida: $PKP_OJS_VERSION"
           echo "VERSION=$PKP_OJS_VERSION" >> $GITHUB_ENV
       - name: Build pkp-ojs
         run: |
           echo "Versão recebida: $VERSION = ${{ env.VERSION }}"
-          bash .config/workflows/ci-build.sh
+          bash .config/workflows/ci/build.sh
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build
