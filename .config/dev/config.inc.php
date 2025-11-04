@@ -30,7 +30,7 @@ app_key = "base64:Uy566tSdOIbUyIROTRJ3JVaHm6BjuDawi2XhRDhRLSc="
 
 ; Set this to On once the system has been installed
 ; (This is generally done automatically by the installer)
-installed = On
+installed = on
 
 ; The canonical URL to the OJS installation (excluding the trailing slash)
 base_url = "http://localhost"
@@ -59,7 +59,7 @@ session_samesite = Lax
 ; time zones.
 ; I.e.: "Europe/Amsterdam"
 ; time_zone="Europe/Amsterdam"
-time_zone = UTC
+time_zone = America/Sao_Paulo
 
 ; Short and long date formats
 date_format_short = "Y-m-d"
