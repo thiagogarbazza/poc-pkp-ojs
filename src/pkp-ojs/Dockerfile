@@ -18,16 +18,18 @@ RUN set -euxo pipefail; \
   # Add apache and libraries
   apk add --no-cache apache2 apache2-ssl apache2-utils; \
   # Add php and libraries
-  apk add --no-cache php84 php84-apache2 php84-bcmath php84-bz2 php84-calendar \
-                     php84-ctype php84-curl php84-dom php84-exif php84-fileinfo \
-                     php84-ftp php84-gettext php84-gd php84-iconv php84-intl \
-                     php84-json php84-mbstring php84-opcache php84-openssl \
-                     php84-pdo_pgsql php84-pgsql php84-phar php84-posix \
-                     php84-session php84-shmop php84-simplexml php84-sockets \
-                     php84-sysvmsg php84-sysvsem php84-sysvshm php84-tokenizer \
-                     php84-xml php84-xmlreader php84-xmlwriter php84-xsl \
-                     php84-zip php84-zlib; \
-  ln -s /usr/bin/php84 /usr/bin/php; \
+  apk add --no-cache php85 \
+                     php85-apache2 php85-bcmath php85-bz2 php85-calendar \
+                     php85-ctype php85-curl php85-dom php85-exif php85-fileinfo \
+                     php85-ftp php85-gettext php85-gd php85-iconv php85-intl \
+                     php85-json php85-mbstring php85-openssl php85-pdo_pgsql \
+                     php85-pgsql php85-phar php85-posix php85-session \
+                     php85-shmop php85-simplexml php85-sockets php85-sysvmsg \
+                     php85-sysvsem php85-sysvshm php85-tokenizer \
+                     php85-xml php85-xmlreader php85-xmlwriter php85-xsl \
+                     php85-zip php85-zlib \
+                     ; \
+  ln -s /usr/bin/php85 /usr/bin/php; \
   # Add utility libraries
   apk add --no-cache ca-certificates; \
   # Create directory used by pkp-ojs.
