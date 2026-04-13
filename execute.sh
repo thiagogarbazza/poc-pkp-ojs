@@ -38,3 +38,6 @@ docker compose --project-name poc-pkp --file .config/dev/docker-compose.yml up -
 
 # For enter postgres container
 # docker exec -it poc-pkp-postgres-1 ash
+
+# For enter smtp container
+# docker exec -it poc-pkp-smtp-1 ash
