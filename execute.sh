@@ -31,10 +31,10 @@ echo "Start pkp-ojs"
 docker compose --project-name poc-pkp --file .config/dev/docker-compose.yml up --abort-on-container-failure --force-recreate --remove-orphans
 
 # For enter job backup container
-# docker exec -it poc-pkp-job-backup-1 ash
+# docker exec -it poc-pkp-app-job-backup-1 ash
 
 # For enter ojs container
-# docker exec -it poc-pkp-pkp-ojs-1 ash
+# docker exec -it poc-pkp-app-pkp-ojs-1 ash
 
 # For enter postgres container
 # docker exec -it poc-pkp-postgres-1 ash
