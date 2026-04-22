@@ -22,9 +22,9 @@ services:
       start_period: 40s
       start_interval: 5s
     depends_on:
-      postgres:
+      mailpit:
         condition: service_healthy
-      smtp:
+      postgres:
         condition: service_healthy
 
   app-job-backup:
@@ -51,6 +51,16 @@ services:
       postgres:
         condition: service_healthy
 
+  mailpit:
+    image: axllent/mailpit:latest
+    environment:
+      TZ: America/Sao_Paulo
+    ports:
+      - "1025:1025" # port SMTP
+      - "8025:8025" # port Web UI
+    volumes:
+      - mailpit-data:/data
+
   postgres:
     image: postgres:17.5-alpine
     environment:
@@ -70,27 +80,9 @@ services:
       start_period: 30s
       start_interval: 5s
 
-  smtp:
-    image: maildev/maildev:2.2.1
-    environment:
-      MAILDEV_MAIL_DIRECTORY: /data/mail
-      TZ: America/Sao_Paulo
-    volumes:
-      - smtp-data:/data/mail
-    ports:
-      - "1025:1025" # port SMTP
-      - "1080:1080" # port Web UI
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost:1080/healthz || exit 1
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-      start_interval: 5s
-
 volumes:
   backups:
+  mailpit-data:
   ojs-files:
   ojs-public:
   postgres-data:
-  smtp-data:

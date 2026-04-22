@@ -307,7 +307,7 @@ sendmail_path = "/usr/sbin/sendmail -bs"
 smtp = on
 
 ; SMTP server settings
-smtp_server = smtp
+smtp_server = mailpit
 smtp_port = 1025
 
 ; Enable SMTP authentication
