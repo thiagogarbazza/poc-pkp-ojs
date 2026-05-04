@@ -78,7 +78,5 @@ find target/pkp-ojs \
     -o -name  "vue.config.js" \
     -o -name  "webpack.config.js" \
   \) > target/pkp-ojs-removed-files
-
 rm -rf $(cat target/pkp-ojs-removed-files)
-
 echo "See more details of removed files, access the file target/pkp-ojs-removed-files"
