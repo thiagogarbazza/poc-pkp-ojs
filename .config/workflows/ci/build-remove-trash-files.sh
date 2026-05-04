@@ -26,7 +26,6 @@ find target/pkp-ojs \
     -o -iname ".husky" \
     -o -iname ".jshintrc" \
     -o -iname ".keepme" \
-    -o -iname ".keepme" \
     -o -iname ".openshift" \
     -o -iname ".postcssrc.js" \
     -o -iname ".scrutinizer.yml" \
@@ -78,6 +77,8 @@ find target/pkp-ojs \
     -o -name  "version" \
     -o -name  "vue.config.js" \
     -o -name  "webpack.config.js" \
-  \) >> target/pkp-ojs-removed-files
+  \) > target/pkp-ojs-removed-files
+
 rm -rf $(cat target/pkp-ojs-removed-files)
+
 echo "See more details of removed files, access the file target/pkp-ojs-removed-files"
