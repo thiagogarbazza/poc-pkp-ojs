@@ -17,10 +17,10 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$SKIP_BUILD_APP" == "false" ]] ; then
-  bash .config/workflows/ci/build.sh
+  .config/workflows/ci/build.sh
   echo "Build application"
 else
-  echo "Build skiped"
+  echo "Build skipped"
 fi
 
 echo "Remove old docker images and clean old executions"
