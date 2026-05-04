@@ -5,8 +5,8 @@ echo "Clear old builds"
 rm -rf target
 mkdir -p target
 
-bash .config/workflows/ci/build-pkp-ojs.sh
-bash .config/workflows/ci/build-remove-trash-files.sh
+.config/workflows/ci/build-pkp-ojs.sh
+.config/workflows/ci/build-remove-trash-files.sh
 
 echo "
 ┌─────────────────────────────────────────────────────────────────────────────┐
