@@ -56,7 +56,7 @@ COPY --chown=root:root        --chmod=444 src/pkp-ojs/assets/apache-app.conf    
 COPY --chown=root:root        --chmod=444 src/pkp-ojs/assets/apache-security.conf /etc/apache2/conf.d
 COPY --chown=root:root        --chmod=444 src/pkp-ojs/assets/php.app.ini          /usr/local/etc/php/conf.d
 
-COPY --chown=appuser:appgroup --chmod=444 src/pkp-ojs/assets/crontab              /etc/crontab
-COPY --chown=appuser:appgroup --chmod=551 src/pkp-ojs/assets/bin/run.sh           /usr/local/bin/run.sh
-COPY --chown=appuser:appgroup --chmod=551 src/pkp-ojs/assets/bin/run-scheduler.sh /usr/local/bin/run-scheduler.sh
-ADD  --chown=appuser:appgroup --chmod=551 target/pkp-ojs.tar.gz                   /var/www/html
+COPY --chown=appuser:appgroup --chmod=444 src/pkp-ojs/assets/crontab               /etc/crontab
+COPY --chown=appuser:appgroup --chmod=551 src/pkp-ojs/assets/bin/run.sh            /usr/local/bin/run.sh
+COPY --chown=appuser:appgroup --chmod=551 src/pkp-ojs/assets/bin/run-scheduling.sh /usr/local/bin/run-scheduling.sh
+ADD  --chown=appuser:appgroup --chmod=551 target/pkp-ojs.tar.gz                    /var/www/html
